@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+    <record model="ir.ui.view" id="project_stage_orderline">
+    <field name="model">project.task.type</field>
+    <field name="name">project.stage.form</field>
+    <field name="inherit_id" ref="project.task_type_edit"/>
+    <field name="arch" type="xml">
+
+        <xpath expr="//field[@name='name']" position="after">
+                           <field name="activity_x" string = "Stage" invisible="0"/>
+
+                </xpath>
+        <xpath expr="//field[@name='name']" position="attributes">
+					<attribute name="string">Activity</attribute>
+
+				</xpath>
+                </field>
+</record>
+
+
+        <record id="view_bill_quantity_tree" model="ir.ui.view">
+            <field name="name">bill.quantity.tree</field>
+            <field name="model">bill.quantity</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <tree string="Bill Of Quantity">
+                <field name="project_id"/>
+                <!--<field name="revision"/>
+                <field name="material_cost"/>
+                <field name="subcontract_cost"/>
+                <field name="equipment_cost"/>
+                <field name="work_package_cost"/>
+                <field name="markup_cost"/>
+                <field name="estimated_cost"/>-->
+            </tree>
+            </field>
+        </record>
+
+        <record id="view_bill_quantity_form" model="ir.ui.view">
+            <field name="name">bill.quantity.form</field>
+            <field name="model">bill.quantity</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <form string="Bill Of Quantity">
+                <header>
+                    <button string="New Revision" type="object"
+                        name="create_new_revision"/>
+                </header>
+                <sheet string="Bill Of Quantity">
+                    <div class="oe_title">
+                        <label string="BOQ Name"/>
+                        <h1>
+                            <field name="boq_name_x" readonly="0"/>
+                        </h1>
+                </div>
+                    <group>
+                        <group>
+                            <field name="project_id" select="1" required="1" />
+                            <field name="subcontract_cost" invisible="1"/>
+                            <field name="equipment_cost" invisible="1"/>
+                            <field name="estimated_cost" invisible="1"/>
+                            <field name="revision" invisible="1"/>
+                             <field name="house_type_x" invisible="0"/>
+                            <!--<field name="activity_x"/>
+                            <field name="activity_typex"/>-->
+                        </group>
+                        <group>
+                            <field name="material_cost"/>
+                            <field name="labor_cost"/>
+                            <field name="work_package_cost" invisible="1"/>
+                            <field name="markup_cost" invisible="1"/>
+                            <field name="boq_categoryx"/>
+                            <field name="boq_typex"/>
+
+
+                        </group>
+                    </group>
+                    <notebook colspan="4" name ="boqnote">
+                        <page string="Orders" name="material">
+                            <field name="quantity_line">
+                                <tree string="Quantity Line">
+                                    <field name="key"/>
+                                    <field name="employee_id"/>
+                                    <field name="assest_id"/>
+                                    <field name="activity_x"/>
+                                    <field name="activity_typex"/>
+				    <field name="partner_id"/>
+				    <field name="work_package_id"/>
+                                    <field name="product_id"/>
+                                     <field name="house_type_x"/>
+                                    <field name="type"/>
+                                    <!--<field name="description"/>-->
+                                    <field name="uom_id"/>
+                                    <field name="qty"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal"/>
+                                </tree>
+                                <form string="Quantity Line">
+                                    <group>
+                                        <group colspan="4">
+                                            <field name="key"/>
+                                            <field name="employee_id"
+                                                attrs="{'invisible': [('key','!=', 'labor')]}"
+                                                 />
+                                                  <field name="project_stage" />
+
+                                            <field name="assest_id"
+                                                attrs="{'invisible': [('key','!=', 'equipment')]}"/>
+					    <field name="partner_id"
+                                                attrs="{'invisible': [('key','!=', 'subcontract')]}"/>
+					    <field name="work_package_id"
+                                                attrs="{'invisible': [('key','!=', 'work_package')]}"/>
+                                            <field name="product_id"
+                                                attrs="{'invisible': [('key','!=', 'material')]}" />
+                                        </group>
+                                        <group>
+                                        <field name="activity_x"/>
+                                        <field name="activity_typex"/>
+                                            <field name="type"/>
+                                            <field name="description"/>
+                                            <field name="uom_id"/>
+                                            <field name="qty"/>
+                                            <field name="price_unit"/>
+                                            <field name="price_subtotal"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+
+                      <!--  <page string="House Type">
+                            <field name="house_type">
+                                 <tree string="House Type Lines" editable="bottom">
+                                    <field name="house_type_x" invisible="0"/>
+                                    <field name="quantity_x" invisible="0"/>
+                                    <field name="boq_rate"/>
+                                    <field name="price_subtotalx" widget="monetary"/>
+
+                                </tree>
+
+                            </field>
+                        </page>-->
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+            </field>
+        </record>
+
+        <record id="view_bill_quantity_search" model="ir.ui.view">
+            <field name="name">bill.quantity.search</field>
+            <field name="model">bill.quantity</field>
+            <field name="type">search</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <search string="Bill Of Quantity">
+                <field name="project_id" select="True"/>
+            </search>
+            </field>
+        </record>
+
+
+<record id="view_house_type_tree" model="ir.ui.view">
+            <field name="name">house.type.line.tree</field>
+            <field name="model">house.type.line</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <tree string="House Type">
+            <field name="name"/>
+                <field name="house_type_id" />
+                            <field name="quantity_x"/>
+                            <field name="boq_rate"/>
+                            <field name="price_subtotalx"/>
+            </tree>
+            </field>
+        </record>
+
+        <record id="view_house_type_form" model="ir.ui.view">
+            <field name="name">house.type.line.form</field>
+            <field name="model">house.type.line</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <form string="House Type">
+
+                <sheet string="House Type">
+                    <div class="oe_title">
+                        <label string="House Type Name"/>
+                        <h1>
+                            <field name="project_id" readonly="0"/>
+                        </h1>
+                </div>
+
+                    <group>
+                        <group>
+
+                            <field name="house_type_id" />
+                            <field name="quantity_x"/>
+
+                        </group>
+                        <group>
+                            <field name="boq_rate"/>
+                            <field name="price_subtotalx"/>
+
+
+                        </group>
+                    </group>
+
+                </sheet>
+
+            </form>
+            </field>
+        </record>
+
+
+
+<record id="view_activity_tree" model="ir.ui.view">
+            <field name="name">activity.customx.tree</field>
+            <field name="model">activity.customx</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <tree string="Activity">
+            <field name="name"/>
+            <field name="activity_typex" />
+
+            </tree>
+            </field>
+        </record>
+
+         <record id="view_activity_form" model="ir.ui.view">
+            <field name="name">activity.customx.form</field>
+            <field name="model">activity.customx</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <form string="Activity">
+
+                <sheet string="Activity">
+                    <div class="oe_title">
+                        <label string="Activity Name"/>
+                        <h1>
+                            <field name="name" readonly="0"/>
+                        </h1>
+                </div>
+
+                    <group>
+                        <group>
+
+                           <field name="activity_typex" />
+
+                        </group>
+                        <group>
+                            <field name="id" invisible="1"/>
+
+                        </group>
+                    </group>
+
+                </sheet>
+
+            </form>
+            </field>
+        </record>
+<record id="view_activity_search" model="ir.ui.view">
+            <field name="name">activity.customx.search</field>
+            <field name="model">activity.customx</field>
+            <field name="type">search</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <search string="Activity Name">
+                <field name="name" select="True"/>
+            </search>
+            </field>
+        </record>
+
+
+
+<record id="view_house_form" model="ir.ui.view">
+            <field name="name">house.type.form</field>
+            <field name="model">house.type</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <form string="House">
+
+                <sheet string="House Type">
+                    <div class="oe_title">
+                        <label string="House Name"/>
+                        <h1>
+                            <field name="name" readonly="0"/>
+                        </h1>
+                </div>
+
+                    <group>
+                        <group>
+
+                           <field name="write_uid" invisible="1"/>
+
+                        </group>
+                        <group>
+                            <field name="id" invisible="1"/>
+
+                        </group>
+                    </group>
+
+                </sheet>
+
+            </form>
+            </field>
+        </record>
+
+
+
+
+
+
+        <record model="ir.actions.act_window" id="act_open_bill_quantity_view">
+            <field name="name">Bill Of Quantity</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bill.quantity</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_bill_quantity_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_house_type_view">
+            <field name="name">House Type Line</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">house.type.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_house_type_view">
+            <field name="name">House Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">house.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_activity_type_view">
+            <field name="name">House Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">activity.customx</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_activity_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_bill_quantity_view_form">
+            <field name="act_window_id" ref="act_open_bill_quantity_view"/>
+            <field name="sequence" eval="20"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_bill_quantity_form"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_bill_quantity_view_tree">
+            <field name="act_window_id" ref="act_open_bill_quantity_view"/>
+            <field name="sequence" eval="10"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bill_quantity_tree"/>
+        </record>
+
+         <menuitem action="act_open_bill_quantity_view"
+         id="menu_bill_quantity"
+         parent="project.menu_project_management"
+          />
+
+          <menuitem action="act_house_type_view"
+         id="act_menu_house_type" sequence="6"
+         parent="project.menu_project_management"
+
+          />
+
+          <menuitem action="act_house_type_view"
+         id="act_menu_house_type_2"
+         parent="act_menu_house_type"/>
+    </data>
+</openerp>

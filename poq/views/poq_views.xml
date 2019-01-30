@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+
+        <record model="ir.ui.view" id="project_task_addox">
+            <field name="model">project.task</field>
+            <field name="name">project.task.form</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='project_id']" position="after">
+                                   <field name="stage" string = "Stage" invisible="0"/>
+
+                        </xpath>
+
+                        <xpath expr="//field[@name='stage']" position="after">
+                                   <field name="activity" string = "Activity" invisible="0"/>
+
+                        </xpath>
+
+                        </field>
+</record>
+
+        <record id="view_poq_tree" model="ir.ui.view">
+            <field name="name">poq.tree</field>
+            <field name="model">pow.base.with.boq</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <tree string="Program of Work">
+                <field name="name"/>
+                <field name="boq_id"/>
+
+            </tree>
+            </field>
+        </record>
+
+        <record id="view_poq_form" model="ir.ui.view">
+            <field name="name">poq.form</field>
+            <field name="model">pow.base.with.boq</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <form string="Program of Work">
+                <header>
+                    <button string="New Revision" type="object"
+                        name="create_new_revision" invisible="1"/>
+                </header>
+                <sheet string="Program of Work">
+                    <div class="oe_title">
+                        <label string="Name"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                </div>
+                    <group>
+                        <group>
+                            <field name="boq_id" select="1" required="1" />
+
+                        </group>
+                        <group>
+                            <field name="id" invisible="1" />
+                        </group>
+                    </group>
+                    <notebook colspan="4">
+
+                        <page string="Activity" name="poq_act">
+                            <field name="poq_task" bottom = "editable">
+                                <tree string="Activity Line">
+                                    <field name="pow_task" invisible="1"/>
+
+                                    <field name="stage_id"/>
+                                    <field name="stage"/>
+                                    <field name="number_work"/>
+                                    <field name="total_days"/>
+                                </tree>
+                                <form string="Activity Line">
+                                    <group>
+                                        <group colspan="4">
+
+                                            <field name="stage"/>
+
+                                            <field name="stage_id"/>
+                                        </group>
+                                        <group>
+                                            <field name="number_work"/>
+                                            <field name="total_days"/>
+                                            <field name="single_item" string ="Is Single Task "/>
+                                            <field name="duration" attrs="{'invisible':[('single_item','=', False)]}"/>
+                                            <field name="predecessor" attrs="{'invisible':[('single_item','=', False)]}"/>
+
+                                        </group>
+                                        <separator string="Work Lines" colspan="4"/>
+
+                                        <field name="pow_lined" string =" " attrs="{'invisible':[('single_item','=',True)]}">
+
+                                            <tree string="Task Line" editable="bottom">
+                                                <field name="pow_line" invisible="1"/>
+                                                <field name="work"/>
+                                                <field name="duration"/>
+                                                <field name="predecessor"/>
+
+                                            </tree>
+                                        </field>
+
+
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+
+                      <!--  <page string="House Type">
+                            <field name="house_type">
+                                 <tree string="House Type Lines" editable="bottom">
+                                    <field name="house_type_x" invisible="0"/>
+                                    <field name="quantity_x" invisible="0"/>
+                                    <field name="boq_rate"/>
+                                    <field name="price_subtotalx" widget="monetary"/>
+
+                                </tree>
+
+                            </field>
+                        </page>-->
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+            </field>
+        </record>
+
+
+
+        <record id="view_poq_task_tree" model="ir.ui.view">
+            <field name="name">poq.tree</field>
+            <field name="model">pow.base.with.boq.task</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <tree string="Program of Work Task">
+                <field name="sequence"/>
+                <field name="stage"/>
+                <field name="stage_id"/>
+
+                <field name="total_days"/>
+                <field name="number_work"/>
+
+            </tree>
+            </field>
+        </record>
+
+        <record id="view_poq_task_form" model="ir.ui.view">
+            <field name="name">poq.task.form</field>
+            <field name="model">pow.base.with.boq.task</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <form string="Program of Work Task">
+                <header>
+
+                </header>
+                <sheet string="Program of Work Task">
+                    <div class="oe_title">
+                        <label string="Name"/>
+                        <h1>
+                            <field name="stage_id"/>
+                        </h1>
+                </div>
+                    <group>
+                        <group>
+
+                         <field name="boq_id" required="1"/>
+                          <!--<field name="sequence"/>-->
+                          <field name="stage"/>
+
+                          <field name="total_days"/>
+
+                        </group>
+                        <group>
+                            <field name="number_work"/>
+                            <field name="duration"/>
+                            <field name="predecessor"/>
+                        </group>
+
+                    </group>
+                    <notebook colspan="4">
+
+                        <page string="Task Line" name="poqtask_act">
+                            <field name="pow_lined">
+                                <tree string="Task Line" editable="bottom">
+                                    <field name="pow_line" invisible="1"/>
+                                    <field name="work"/>
+                                    <field name="duration"/>
+                                    <field name="predecessor"/>
+
+                                </tree>
+                                <form string="POW Task Line">
+                                    <group>
+                                        <group colspan="4">
+                                            <field name="work"/>
+                                            <field name="duration"/>
+                                        </group>
+                                        <group>
+                                             <field name="predecessor"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+
+                      <!--  <page string="House Type">
+                            <field name="house_type">
+                                 <tree string="House Type Lines" editable="bottom">
+                                    <field name="house_type_x" invisible="0"/>
+                                    <field name="quantity_x" invisible="0"/>
+                                    <field name="boq_rate"/>
+                                    <field name="price_subtotalx" widget="monetary"/>
+
+                                </tree>
+
+                            </field>
+                        </page>-->
+                    </notebook>
+                </sheet>
+
+            </form>
+            </field>
+        </record>
+
+        <record id="view_pow_line_tree" model="ir.ui.view">
+            <field name="name">pow.tree</field>
+            <field name="model">pow.base.with.boq.line</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <tree string="Program of Work Line">
+
+                <field name="work"/>
+                <field name="duration"/>
+
+                <field name="predecessor"/>
+
+            </tree>
+            </field>
+        </record>
+        <record id="view_poq_line_form" model="ir.ui.view">
+            <field name="name">pow.base.with.boq.line.form</field>
+            <field name="model">pow.base.with.boq.line</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <form string="Program of Work Line">
+                <header>
+
+                </header>
+                <sheet string="Program of Work Task">
+
+                    <group>
+                        <group>
+                          <field name="pow_line" invisible="1"/>
+                          <field name="work"/>
+
+                        </group>
+                        <group>
+                            <field name="duration"/>
+                          <field name="predecessor"/>
+
+                        </group>
+                    </group>
+
+                </sheet>
+
+            </form>
+            </field>
+        </record>
+
+
+
+        <record id="view_bill_of_quantity_tree_inh" model="ir.ui.view">
+            <field name="name">bill.quantity.inherittree</field>
+            <field name="model">bill.quantity</field>
+            <field name="inherit_id" ref="construction_management.view_bill_quantity_tree"/>
+            <field name="arch" type="xml">
+            <xpath expr="//field[@name='project_id']" position="after">
+                           <field name="house_type"/>
+                            <field name="material_cost"/>
+                            <field name="labor_cost"/>
+                            <field name="amount_total"/>
+                </xpath>
+            </field>
+            </record>
+
+
+        <record id="view_bill_of_quantity_inh" model="ir.ui.view">
+            <field name="name">bill.quantity.inheritcus</field>
+            <field name="model">bill.quantity</field>
+            <field name="inherit_id" ref="construction_management.view_bill_quantity_form"/>
+            <field name="arch" type="xml">
+
+             <xpath expr="//field[@name='markup_cost']" position="after">
+                           <field name="project_task_stages_ids" widget="many2many_tags" invisible="1"/>
+                </xpath>
+
+                 <xpath expr="//field[@name='boq_typex']" position="after">
+                           <h4><b>Total Amount <field name="amount_total"/></b></h4>
+                </xpath>
+
+                <xpath expr="//field[@name='quantity_line']" position="before">
+                    <separator string="Orders" colspan="4" />
+                </xpath>
+                <xpath expr="//notebook[@name='boqnote']" position="before">
+
+                    <notebook colspan="4">
+
+                        <page string=" " name="poqtotal_act">
+                             <separator string="Stage" colspan="4" />
+                            <field name="stage_totals">
+
+                                <form string="POW Stage Line">
+                                    <group>
+                                        <group colspan="4">
+                                            <field name="stage_id" invisible="0"/>
+                                        </group>
+                                        <group>
+                                              <field name="total"/>
+                                        </group>
+                                    </group>
+                                </form>
+
+                                <separator string="Stage" colspan="4" />
+                                <tree string="Stage Total">
+
+                                    <field name="stage_id" invisible="0"/>
+                                    <field name="total"/>
+
+                                </tree>
+                            </field>
+                            <separator string="Stage Lines" colspan="4" />
+
+                            <field name="stage" readonly="0">
+                                <form string="POW Task Line">
+                                    <group>
+                                        <group colspan="4">
+                                            <field name="name"/>
+                                             <field name="stage_id"/>
+
+                                             <field name="activity_cus"/>
+                                            <field name="stage_bill_id" invisible="1"/>
+                                            <field name="material_total"/>
+                                            <field name="labour_total"/>
+
+                                        </group>
+                                        <group>
+
+                                              <field name="total_dummy"/>
+
+                                        </group>
+                                        <separator string="Stage Materials" colspan="4" />
+                                            <field name="stage_datas_material">
+
+
+                                                <tree string="Stage Material">
+                                                <field name="product_id"/>
+                                                    <field name="stage_id" invisible="1"/>
+
+
+
+
+                                                    <field name="qty"/>
+
+
+
+                                                    <field name="label"/>
+                                                    <field name="rate"/>
+
+                                                    <field name="total"/>
+
+                                                </tree>
+                                             </field>
+                                             <separator string="Labour" colspan="4" />
+                                                <field name="stage_datas_labour">
+
+                                                <tree string="Stage Labour">
+
+                                                    <field name="activity_id"/>
+                                                    <field name="stage_id" invisible="1"/>
+                                                    <field name="qty"/>
+                                                    <field name="label"/>
+                                                    <field name="rate"/>
+                                                    <field name="qty"/>
+
+                                                    <field name="amount_total"/>
+                                                    <field name="state"/>
+
+                                                </tree>
+                                             </field>
+                                    </group>
+                                </form>
+
+                                <tree string="Stage Total">
+
+                                    <field name="name"/>
+                                    <field name="activity_cus"/>
+                                    <field name="stage_id"/>
+
+                                    <field name="stage_bill_id" invisible="1"/>
+                                    <field name="material_total"/>
+                                    <field name="labour_total"/>
+
+                                    <field name="total_dummy"/>
+                                </tree>
+                            </field>
+                          </page>
+
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="viewstage_total_tree" model="ir.ui.view">
+            <field name="name">stage.total.tree</field>
+            <field name="model">stage.total</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <tree string="Stage total">
+
+                <field name="stage_id"/>
+
+                <field name="total"/>
+            </tree>
+            </field>
+        </record>
+         <record id="view_stage_total_form" model="ir.ui.view">
+            <field name="name">stage.total.form</field>
+            <field name="model">stage.total</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <form string="Stage total">
+                <header>
+
+                </header>
+                <sheet string="Stage total">
+
+                    <group>
+                        <group>
+
+                          <field name="stage_id"/>
+
+
+                        </group>
+                        <group>
+                            <field name="total" invisible="0"/>
+
+                        </group>
+                    </group>
+
+                </sheet>
+
+            </form>
+            </field>
+        </record>
+
+
+
+<record id="bill_of_qty_tree" model="ir.ui.view">
+            <field name="name">bill.of.quantity.stage.tree</field>
+            <field name="model">bill.of.quantity.stage</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <tree string="BOQ stage">
+                <field name="name"/>
+                <field name="material_total"/>
+                <field name="labour_total"/>
+
+                <field name="stage_id"/>
+                <field name="stage_datas_material"/>
+                <field name="stage_datas_labour"/>
+            </tree>
+            </field>
+        </record>
+         <record id="view_bill_stage_form" model="ir.ui.view">
+            <field name="name">bill.of.quantity.stage.form</field>
+            <field name="model">bill.of.quantity.stage</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <form string="BOQ Stage">
+                <header>
+
+                </header>
+                <sheet string="BOQ total">
+
+                    <group>
+                        <group>
+
+                          <field name="name"/>
+                          <field name="activity_cus"/>
+                            <field name="material_total"/>
+                            <field name="labour_total"/>
+
+
+                        </group>
+                        <group>
+
+                            <field name="stage_id"/>
+
+                        </group>
+                            <notebook colspan="4">
+
+                        <page string="Material Line" name="poqtask_act2">
+                        <separator string="Material" colspan="4" />
+                            <field name="stage_datas_material">
+                                <tree string="Material Line">
+
+                                    <field name="product_id"/>
+
+                                    <field name="qty"/>
+
+                                    <field name="label"/>
+                                    <field name="rate"/>
+
+                                    <field name="total"/>
+
+                                </tree>
+                                <form string="Material Line">
+                                    <group>
+                                        <group colspan="4">
+                                            <field name="product_id"/>
+
+                                            <field name="qty"/>
+
+                                        </group>
+                                        <group>
+
+                                            <field name="label"/>
+                                            <field name="rate"/>
+
+                                            <field name="total"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+
+                            <separator string="Labour" colspan="4" />
+                                                <field name="stage_datas_labour">
+
+                                                <tree string="Stage Labour">
+
+                                                    <field name="activity_id"/>
+                                                    <field name="qty"/>
+                                                    <field name="label"/>
+                                                    <field name="rate"/>
+
+
+                                                    <field name="amount_total"/>
+                                                    <field name="state"/>
+
+                                                </tree>
+                            </field>
+                        </page>
+
+                      <!--  <page string="House Type">
+                            <field name="house_type">
+                                 <tree string="House Type Lines" editable="bottom">
+                                    <field name="house_type_x" invisible="0"/>
+                                    <field name="quantity_x" invisible="0"/>
+                                    <field name="boq_rate"/>
+                                    <field name="price_subtotalx" widget="monetary"/>
+
+                                </tree>
+
+                            </field>
+                        </page>-->
+                    </notebook>
+
+                    </group>
+
+                </sheet>
+
+            </form>
+            </field>
+        </record>
+
+<record id="bill_of_qty_data_tree" model="ir.ui.view">
+            <field name="name">bill.of.quantity.stage.data.tree</field>
+            <field name="model">bill.of.quantity.stage.data</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <tree string="BOQ stage Data">
+                <field name="product_id"/>
+
+                <field name="qty"/>
+
+                <field name="label"/>
+                <field name="rate"/>
+
+                <field name="total"/>
+            </tree>
+            </field>
+        </record>
+         <record id="view_bill_stage_data_form" model="ir.ui.view">
+            <field name="name">bill.of.quantity.stage.data.form</field>
+            <field name="model">bill.of.quantity.stage.data</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <form string="BOQ Stage Data">
+                <header>
+
+                </header>
+                <sheet string="BOQ Data">
+
+                    <group>
+                        <group>
+
+                          <field name="product_id"/>
+
+                            <field name="qty"/>
+                            <field name="label"/>
+
+
+
+                        </group>
+                        <group>
+
+
+                            <field name="rate"/>
+
+                            <field name="total"/>
+                        </group>
+                    </group>
+
+                </sheet>
+
+            </form>
+            </field>
+        </record>
+
+
+
+<record id="bill_of_qty_labour_tree" model="ir.ui.view">
+            <field name="name">bill.of.quantity.labor.tree</field>
+            <field name="model">bill.of.quantity.stage.data.labor</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <tree string="BOQ stage Labour">
+
+                <field name="activity_id"/>
+                <field name="qty"/>
+                <field name="label"/>
+                <field name="rate"/>
+
+
+
+                <field name="amount_total"/>
+                <field name="state"/>
+            </tree>
+            </field>
+        </record>
+         <record id="view_bill_stage_data_form" model="ir.ui.view">
+            <field name="name">bill.of.quantity.stage.labor.form</field>
+            <field name="model">bill.of.quantity.stage.data.labor</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+            <form string="BOQ Labour">
+                <header>
+
+
+                </header>
+                <sheet string="BOQ Labour">
+
+                    <group>
+                        <group>
+                            <field name="activity_id"/>
+                          <field name="qty"/>
+                            <field name="label"/>
+                            <field name="rate"/>
+
+
+
+                        </group>
+                        <group>
+
+                            <field name="amount_total"/>
+                            <field name="state"/>
+
+                        </group>
+                    </group>
+
+                </sheet>
+
+            </form>
+            </field>
+        </record>
+
+
+
+<record model="ir.actions.act_window" id="act_program_of_work_view">
+            <field name="name">Program of Work</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pow.base.with.boq</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="act_program_of_line_view">
+            <field name="name">Program of WorkLine</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pow.base.with.boq.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="act_program_of_task_view">
+            <field name="name">Program of WorkTask</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pow.base.with.boq.task</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_stage_total_view">
+            <field name="name">Stage Total</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stage.total</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_boq_view">
+            <field name="name">BOQ</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bill.of.quantity.stage</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_boq_data_view">
+            <field name="name">BOQ Data</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bill.of.quantity.stage.data</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="act_boq_labour_view">
+            <field name="name">BOQ Labour</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bill.of.quantity.stage.data.labor</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+
+
+        <menuitem action="act_program_of_work_view"
+         id="act_menu_program_work_subxx" name = "PoW" sequence="1"
+         parent="construction_management.act_menu_house_type"/>
+
+          <menuitem action="act_program_of_line_view"
+         id="act_menu_program_work_sub2" name = "PoW Line" sequence="2"
+         parent="construction_management.act_menu_house_type"/>
+
+         <!--<menuitem action="act_stage_total_view"
+         id="act_menu_stage_total_sub2" name = "Stage" sequence="3"
+         parent="construction_management.act_menu_house_type"/>-->
+
+         <menuitem action="act_boq_view"
+         id="act_menu_boq_sub2" name = "BOQ Stage and Activities" sequence="4"
+         parent="construction_management.act_menu_house_type"/>
+
+         <!--<menuitem action="act_boq_data_view"
+         id="act_menu_boq_data_sub2" name = "BOQ Material " sequence="5"
+         parent="construction_management.act_menu_house_type"/>-->
+
+
+        <!--<menuitem action="act_boq_labour_view"
+         id="act_menu_boq_labour_sub2" name = "BOQ Labour" sequence="6"
+         parent="construction_management.act_menu_house_type"/>-->
+
+          <menuitem action="act_program_of_task_view"
+         id="act_menu_boq_op_sub2" name = "BOQ Task" sequence="7"
+         parent="construction_management.act_menu_house_type"/>
+
+
+</data>
+
+<data>
+        <record id="seq_custom_bill_stage" model="ir.sequence">
+            <field name="name">bill_ofqty_stage</field>
+            <field name="code">bill.of.quantity.stage</field>
+            <field name="prefix">B/</field>
+            <field name="padding">5</field>
+        </record>
+
+    </data>
+</odoo>

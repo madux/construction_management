@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="report_project_note_custom">
+            <t t-call="report.external_layout">
+                <div class="page">
+                <t t-foreach="docs" t-as="o">
+                    <div class="row">
+                        <h2 style="text-align:center;">Project Note</h2><br/>
+                    </div>  
+                    <table class="table table-condensed">
+                                <thead>
+							    <tr>
+								    <th>Project</th>
+								    <th>Responsible User</th>
+								    <th>Description</th>
+							    </tr>
+						        </thead>  
+						        <tbody class="project_tbody">
+							    <tr>
+								    <td>
+									    <span t-field="o.construction_proj_id" />
+								    </td>
+						            <td>
+									    <span t-field="o.responsible_user" />
+								    </td>
+								    <td>
+									    <span t-field="o.description" />
+								    </td>
+							    </tr>
+						</tbody>
+                            </table>
+                            <hr/>
+                            <span><span t-field="o.construction_proj_id"/> is an early phase of the <b>Project</b> where a <b>project's</b>
+                            key features, structure, criteria  for success, and major deliverables are all planned out.
+                            </span>
+                </t>
+                </div>
+            </t>
+        </template>
+
+<template id="report_project_note">
+    <t t-call="report.html_container">
+        <t t-foreach="doc_ids" t-as="o">
+            <t t-call="construction_management.report_project_note_custom" />
+        </t>
+    </t>
+</template>
+
+</data>
+</openerp>
+
